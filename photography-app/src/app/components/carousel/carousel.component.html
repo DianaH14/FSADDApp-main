@@ -1,0 +1,30 @@
+<div class="carousel-container">
+  <button class="carousel-arrow left-arrow" (click)="previousImage()" aria-label="Previous image">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+
+  <div class="carousel-image-wrapper">
+    <img 
+      [src]="currentImage.src" 
+      [alt]="currentImage.alt"
+      class="carousel-image"
+    />
+  </div>
+
+  <button class="carousel-arrow right-arrow" (click)="nextImage()" aria-label="Next image">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+
+  <div class="carousel-indicators">
+    <div *ngFor="let image of images; let i = index" 
+         [class.active]="i === currentIndex"
+         class="indicator"
+         (click)="currentIndex = i"
+         [attr.aria-label]="'Go to image ' + (i + 1)">
+    </div>
+  </div>
+</div>

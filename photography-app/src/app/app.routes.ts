@@ -1,7 +1,11 @@
 import { Routes } from '@angular/router';
-import { GalleryComponent } from './components/gallery/gallery.component';
+import { HomeComponent } from './components/home/home.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/gallery', pathMatch: 'full' },
-  { path: 'gallery', component: GalleryComponent }
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'about', component: HomeComponent },
+  { path: 'portfolio', component: HomeComponent },
+  { path: 'info', component: HomeComponent },
+  { path: 'contact', component: HomeComponent }
 ];

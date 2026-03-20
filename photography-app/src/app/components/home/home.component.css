@@ -1,0 +1,26 @@
+
+.hero-section {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.description-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #ffffff;
+}
+
+.description-text {
+  color: #666;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0;
+  max-width: 600px;
+  line-height: 1.6;
+}
