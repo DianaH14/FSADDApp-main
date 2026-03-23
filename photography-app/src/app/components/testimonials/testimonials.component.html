@@ -1,0 +1,17 @@
+<section class="testimonials section-shell">
+	<p class="kicker">{{ language.current() === 'ro' ? 'Testimoniale' : 'Testimonials' }}</p>
+	<h2>
+		{{ language.current() === 'ro'
+			? 'Voci care confirma o experienta memorabila.'
+			: 'Voices that confirm a memorable experience.' }}
+	</h2>
+
+	<div class="cards">
+		@for (item of testimonials[language.current()]; track item.author) {
+			<article class="card">
+				<p class="quote">"{{ item.quote }}"</p>
+				<p class="author">{{ item.author }}</p>
+			</article>
+		}
+	</div>
+</section>

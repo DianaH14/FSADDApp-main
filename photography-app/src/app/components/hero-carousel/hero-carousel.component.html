@@ -1,0 +1,52 @@
+<section class="hero" id="top" [attr.aria-label]="language.current() === 'ro' ? 'Galerie principala' : 'Hero showcase'">
+	<div class="hero-slides">
+		@for (slide of slides; track slide.src; let i = $index) {
+			<figure class="slide" [class.active]="i === currentIndex">
+				<img [src]="slide.src" [alt]="language.current() === 'ro' ? slide.altRo : slide.altEn" />
+			</figure>
+		}
+	</div>
+
+	<div class="hero-overlay">
+		<p class="eyebrow">
+			{{ language.current() === 'ro' ? 'Fotografii de nunta si portrete de poveste' : 'Distinctive Wedding & Portrait Photography' }}
+		</p>
+		<h1>Crisan Alexandru</h1>
+		<p class="subtitle">
+			{{ language.current() === 'ro'
+				? 'Momente rare, surprinse cu rafinament editorial si emotie autentica.'
+				: 'Rare moments captured with editorial refinement and genuine emotion.' }}
+		</p>
+	</div>
+
+	<div class="carousel-controls" [attr.aria-label]="language.current() === 'ro' ? 'Controale carusel' : 'Carousel controls'">
+		<button
+			class="arrow"
+			type="button"
+			[attr.aria-label]="language.current() === 'ro' ? 'Imaginea anterioara' : 'Previous slide'"
+			(click)="previousSlide()"
+		>
+			&#10094;
+		</button>
+		<button
+			class="arrow"
+			type="button"
+			[attr.aria-label]="language.current() === 'ro' ? 'Imaginea urmatoare' : 'Next slide'"
+			(click)="nextSlide()"
+		>
+			&#10095;
+		</button>
+	</div>
+
+	<div class="dots" role="tablist" [attr.aria-label]="language.current() === 'ro' ? 'Selectoare imagini principale' : 'Hero slide selectors'">
+		@for (slide of slides; track slide.src; let i = $index) {
+			<button
+				class="dot"
+				type="button"
+				[class.active]="i === currentIndex"
+				[attr.aria-label]="(language.current() === 'ro' ? 'Imaginea ' : 'Slide ') + (i + 1)"
+				(click)="goToSlide(i)"
+			></button>
+		}
+	</div>
+</section>

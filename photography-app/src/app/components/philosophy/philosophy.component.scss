@@ -1,0 +1,31 @@
+.section-shell {
+	width: min(1100px, 92vw);
+	margin-inline: auto;
+	padding-block: clamp(4.4rem, 9vw, 7.5rem);
+}
+
+.kicker {
+	margin: 0;
+	text-transform: uppercase;
+	font-size: 0.72rem;
+	letter-spacing: 0.26em;
+	color: #8f7d67;
+}
+
+h2 {
+	margin: 1.1rem 0 1.5rem;
+	max-width: 900px;
+	font-family: var(--font-display);
+	font-size: clamp(1.9rem, 4.2vw, 3.25rem);
+	font-weight: 500;
+	line-height: 1.22;
+	color: #1e1c18;
+}
+
+p {
+	margin: 0;
+	max-width: 780px;
+	font-size: clamp(1rem, 1.3vw, 1.12rem);
+	line-height: 1.9;
+	color: #4f473e;
+}

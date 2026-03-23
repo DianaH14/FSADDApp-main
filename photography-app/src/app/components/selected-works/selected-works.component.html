@@ -1,0 +1,18 @@
+<section class="works section-shell">
+	<div class="heading">
+		<p class="kicker">{{ language.current() === 'ro' ? 'Portofoliu' : 'Portfolio' }}</p>
+		<h2>
+			{{ language.current() === 'ro'
+				? 'Povesti vizuale construite cu discretie si rafinament.'
+				: 'Visual stories crafted with discretion and refinement.' }}
+		</h2>
+	</div>
+
+	<div class="works-grid">
+		@for (work of works; track work.src) {
+			<figure class="work-item">
+				<img [src]="work.src" [alt]="language.current() === 'ro' ? work.altRo : work.altEn" loading="lazy" />
+			</figure>
+		}
+	</div>
+</section>

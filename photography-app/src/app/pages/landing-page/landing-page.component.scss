@@ -1,0 +1,29 @@
+.page-shell {
+	background:
+		radial-gradient(circle at 80% 10%, rgba(182, 154, 116, 0.13), transparent 35%),
+		radial-gradient(circle at 15% 75%, rgba(96, 83, 67, 0.09), transparent 28%),
+		#f8f6f2;
+	color: #1f1d1b;
+	overflow: clip;
+}
+
+app-philosophy,
+app-selected-works,
+app-testimonials,
+app-contact-cta,
+app-footer {
+	display: block;
+	animation: reveal 0.8s ease both;
+}
+
+@keyframes reveal {
+	from {
+		opacity: 0;
+		transform: translateY(22px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
