@@ -16,6 +16,10 @@ app-footer {
 	animation: reveal 0.8s ease both;
 }
 
+app-testimonials {
+	margin-bottom: clamp(3.75rem, 7vw, 6.5rem);
+}
+
 @keyframes reveal {
 	from {
 		opacity: 0;

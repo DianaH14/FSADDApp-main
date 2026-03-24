@@ -26,6 +26,11 @@ export class TestimonialsComponent {
         quote:
           'Experienta a fost impecabila de la prima discutie pana la galerie. Fiecare fotografie are emotie reala si rafinament.',
         author: 'Andreea & Vlad'
+      },
+      {
+        quote:
+          'A stiut sa surprinda momentele pe care nici noi nu le-am observat. Albumul nostru este o comoara pe care o vom pastra toata viata.',
+        author: 'Cristina & Radu'
       }
     ],
     en: [
@@ -43,6 +48,11 @@ export class TestimonialsComponent {
         quote:
           'The experience was impeccable from our first call to the final gallery. Every image carries emotion and refinement.',
         author: 'Andreea & Vlad'
+      },
+      {
+        quote:
+          'He captured moments we hadn\'t even noticed ourselves. Our album is a treasure we will keep for a lifetime.',
+        author: 'Cristina & Radu'
       }
     ]
   };

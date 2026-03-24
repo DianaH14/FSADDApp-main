@@ -1,5 +1,5 @@
 .section-shell {
-	width: min(1100px, 92vw);
+	width: min(1340px, 94vw);
 	margin-inline: auto;
 	padding-block: clamp(4rem, 9vw, 7rem);
 }
@@ -23,7 +23,7 @@ h2 {
 
 .cards {
 	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 1rem;
 }
 

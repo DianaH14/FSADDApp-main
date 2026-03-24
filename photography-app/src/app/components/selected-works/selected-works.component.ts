@@ -12,43 +12,43 @@ export class SelectedWorksComponent {
 
   readonly works = [
     {
-      src: 'assets/images/portfolio-1.jpg',
-      altRo: 'Portret in lumina laterala fina',
-      altEn: 'Portrait in soft side light'
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_9436.jpg?updatedAt=1774375906630',
+      altRo: 'peisaje',
+      altEn: 'Landscapes'
     },
     {
-      src: 'assets/images/portfolio-2.jpg',
-      altRo: 'Cadru romantic urban de cuplu',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_6931.jpg?updatedAt=1774375883814',
+      altRo: 'flori',
       altEn: 'Romantic cityscape couple frame'
     },
     {
-      src: 'assets/images/portfolio-3.jpg',
-      altRo: 'Detaliu de nunta in stil editorial',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_5260.jpg?updatedAt=1774375800999',
+      altRo: 'cuplu',
       altEn: 'Wedding detail editorial flatlay'
     },
     {
-      src: 'assets/images/portfolio-4.jpg',
-      altRo: 'Portret elegant la receptie black tie',
-      altEn: 'Black tie elegant reception portrait'
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_2681-Enhanced-NR.jpg?updatedAt=1774375986692',
+      altRo: 'party',
+      altEn: 'party'
     },
     {
-      src: 'assets/images/portfolio-5.jpg',
-      altRo: 'Portret exterior la ora aurie',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_9165.jpg?updatedAt=1774375880273',
+      altRo: 'Portret',
       altEn: 'Golden hour outdoor portrait'
     },
     {
-      src: 'assets/images/portfolio-6.jpg',
-      altRo: 'Scena de mireasa in arhitectura minimalista',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_4665.jpg?updatedAt=1774376024890',
+      altRo: 'sushi',
       altEn: 'Minimal architecture bridal scene'
     },
     {
-      src: 'assets/images/portfolio-7.jpg',
-      altRo: 'Moment candid plin de emotie',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_2469.jpg?updatedAt=1774375767504',
+      altRo: 'peisaj natura',
       altEn: 'Emotional candid celebration moment'
     },
     {
-      src: 'assets/images/portfolio-8.jpg',
-      altRo: 'Compozitie editoriala monocroma rafinata',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_4859.jpg?updatedAt=1774375993586',
+      altRo: 'strada',
       altEn: 'Refined monochrome editorial composition'
     }
   ];
