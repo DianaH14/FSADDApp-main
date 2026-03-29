@@ -20,7 +20,7 @@ export class AppComponent {
       document.documentElement.lang = selectedLanguage;
 
       this.title.setTitle(
-        selectedLanguage === 'ro' ? 'Crisan Fotografie' : 'Crisan Photography'
+        selectedLanguage === 'ro' ? 'Crisan Visuals' : 'Crisan Visuals'
       );
     });
   }

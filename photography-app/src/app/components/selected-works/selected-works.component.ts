@@ -22,7 +22,7 @@ export class SelectedWorksComponent {
       altEn: 'Romantic cityscape couple frame'
     },
     {
-      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DSC_5260.jpg?updatedAt=1774375800999',
+      src: 'https://ik.imagekit.io/95ifsepdv/photography/portfolio/DAVID&SORINA-439.jpg?updatedAt=1774375907577',
       altRo: 'cuplu',
       altEn: 'Wedding detail editorial flatlay'
     },
