@@ -1,0 +1,53 @@
+<section class="auth-page section-shell">
+  <div class="auth-panel">
+    <p class="kicker">{{ language.current() === 'ro' ? 'Cont' : 'Account' }}</p>
+    <h1>
+      {{ authMode === 'login'
+        ? language.current() === 'ro' ? 'Autentificare' : 'Login'
+        : language.current() === 'ro' ? 'Inregistrare' : 'Register' }}
+    </h1>
+    <p class="auth-subtitle">
+      {{ authMode === 'login'
+        ? language.current() === 'ro'
+          ? 'Conecteaza-te pentru a continua cu rezervarile si recenziile.'
+          : 'Sign in to continue with bookings and reviews.'
+        : language.current() === 'ro'
+          ? 'Creaza un cont pentru a pastra momentul fotografiat in cele mai bune cadre.'
+          : 'Create an account to keep your photography experience in focus.' }}
+    </p>
+
+    <div class="mode-buttons">
+      <button type="button" (click)="toggleMode('login')" [class.active]="authMode === 'login'">
+        {{ language.current() === 'ro' ? 'Autentificare' : 'Login' }}
+      </button>
+      <button type="button" (click)="toggleMode('register')" [class.active]="authMode === 'register'">
+        {{ language.current() === 'ro' ? 'Inregistrare' : 'Register' }}
+      </button>
+    </div>
+
+    <form [formGroup]="authForm" (ngSubmit)="submit()" class="auth-form">
+      <label *ngIf="authMode === 'register'">
+        {{ language.current() === 'ro' ? 'Nume' : 'Name' }}
+        <input type="text" formControlName="name" placeholder="Alex" />
+      </label>
+
+      <label>
+        {{ language.current() === 'ro' ? 'Email' : 'Email' }}
+        <input type="email" formControlName="email" placeholder="alex@example.com" />
+      </label>
+
+      <label>
+        {{ language.current() === 'ro' ? 'Parola' : 'Password' }}
+        <input type="password" formControlName="password" placeholder="••••••••" />
+      </label>
+
+      <button type="submit" class="primary-button">
+        {{ authMode === 'login'
+          ? language.current() === 'ro' ? 'Autentificare' : 'Login'
+          : language.current() === 'ro' ? 'Inregistrare' : 'Register' }}
+      </button>
+
+      <p class="status-message" *ngIf="statusMessage">{{ statusMessage }}</p>
+    </form>
+  </div>
+</section>

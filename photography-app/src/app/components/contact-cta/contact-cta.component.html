@@ -1,18 +1,71 @@
-<section class="contact-cta section-shell">
-	<div class="cta-panel">
-		<p class="kicker">{{ language.current() === 'ro' ? 'Contact' : 'Contact' }}</p>
-		<h2>
-			{{ language.current() === 'ro'
-				? 'Hai sa transformam ziua voastra intr-o poveste vizuala atemporala.'
-				: 'Let us transform your day into a timeless visual story.' }}
-		</h2>
-		<p class="description">
-			{{ language.current() === 'ro'
-				? 'Spune-mi cateva detalii despre evenimentul vostru, iar eu voi reveni cu o propunere personalizata.'
-				: 'Share a few details about your event and I will return with a tailored proposal.' }}
-		</p>
-		<a href="mailto:hello@crisan.ro" class="cta-button">
-			{{ language.current() === 'ro' ? 'Programeaza-te acum' : 'Get in Touch' }}
-		</a>
-	</div>
+<section id="contact" class="contact-cta section-shell">
+  <div class="cta-panel">
+    <p class="kicker">{{ language.current() === 'ro' ? 'Contact' : 'Contact' }}</p>
+    <h2>
+      {{ language.current() === 'ro'
+        ? 'Hai sa transformam ziua voastra intr-o poveste vizuala atemporala.'
+        : 'Let us transform your day into a timeless visual story.' }}
+    </h2>
+    <p class="description">
+      {{ language.current() === 'ro'
+        ? 'Spune-mi cateva detalii despre evenimentul vostru, iar eu voi reveni cu o propunere personalizata.'
+        : 'Share a few details about your event and I will return with a tailored proposal.' }}
+    </p>
+
+    <div class="status-message" *ngIf="statusMessage">{{ statusMessage }}</div>
+
+    <div *ngIf="!isLoggedIn" class="auth-panel">
+      <p>
+        {{ language.current() === 'ro'
+          ? 'Autentifica-te sau inregistreaza-te pentru a face o rezervare.'
+          : 'Please log in or register to create a booking.' }}
+      </p>
+      <button type="button" (click)="navigateToAuth()">
+        {{ language.current() === 'ro' ? 'Autentificare / Inregistrare' : 'Login / Register' }}
+      </button>
+    </div>
+
+    <div *ngIf="isLoggedIn" class="booking-panel">
+      <h3>
+        {{ language.current() === 'ro' ? 'Creeaza o rezervare' : 'Create a booking' }}
+      </h3>
+      <p>
+        {{ language.current() === 'ro' ? 'Conectat ca' : 'Logged in as' }} {{ userName }}
+      </p>
+
+      <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()" class="cta-form">
+        <label>
+          {{ language.current() === 'ro' ? 'Nume complet' : 'Full name' }}
+          <input type="text" formControlName="fullName" placeholder="Alex Johnson" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Email' : 'Email' }}
+          <input type="email" formControlName="email" placeholder="alex@example.com" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Data' : 'Date' }}
+          <input type="date" formControlName="date" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Ora' : 'Time' }}
+          <input type="time" formControlName="time" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Locatia' : 'Location' }}
+          <input type="text" formControlName="location" placeholder="Bucharest, studio" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Tip sesiune' : 'Session type' }}
+          <input type="text" formControlName="sessionType" placeholder="Couple Portrait" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Note' : 'Notes' }}
+          <textarea formControlName="notes" placeholder="Any special requests?"></textarea>
+        </label>
+        <button type="submit">
+          {{ language.current() === 'ro' ? 'Trimite cererea' : 'Submit request' }}
+        </button>
+      </form>
+    </div>
+  </div>
 </section>

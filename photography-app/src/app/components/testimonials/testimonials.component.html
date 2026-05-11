@@ -1,17 +1,49 @@
 <section class="testimonials section-shell">
-	<p class="kicker">{{ language.current() === 'ro' ? 'Testimoniale' : 'Testimonials' }}</p>
-	<h2>
-		{{ language.current() === 'ro'
-			? 'Voci care confirma o experienta memorabila.'
-			: 'Voices that confirm a memorable experience.' }}
-	</h2>
+  <p class="kicker">{{ language.current() === 'ro' ? 'Testimoniale' : 'Testimonials' }}</p>
+  <h2>
+    {{ language.current() === 'ro'
+      ? 'Voci care confirma o experienta memorabila.'
+      : 'Voices that confirm a memorable experience.' }}
+  </h2>
 
-	<div class="cards">
-		@for (item of testimonials[language.current()]; track item.author) {
-			<article class="card">
-				<p class="quote">"{{ item.quote }}"</p>
-				<p class="author">{{ item.author }}</p>
-			</article>
-		}
-	</div>
+  <div class="cards" *ngIf="backendReviews.length > 0; else staticTestimonials">
+    <article class="card" *ngFor="let review of backendReviews; trackBy: trackByReview">
+      <p class="quote">"{{ review.comment }}"</p>
+      <p class="author">{{ review.username }} • {{ review.rating }}/5</p>
+    </article>
+  </div>
+
+  <ng-template #staticTestimonials>
+    <div class="cards">
+      <article class="card" *ngFor="let item of testimonials[language.current()]">
+        <p class="quote">"{{ item.quote }}"</p>
+        <p class="author">{{ item.author }}</p>
+      </article>
+    </div>
+  </ng-template>
+
+  <div class="review-form">
+    <h3>{{ language.current() === 'ro' ? 'Lasa o recenzie' : 'Leave a review' }}</h3>
+    <p *ngIf="!isLoggedIn">
+      {{ language.current() === 'ro'
+        ? 'Autentifica-te pentru a lasa o recenzie.'
+        : 'Log in to leave a review.' }}
+    </p>
+    <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="cta-form">
+      <label>
+        {{ language.current() === 'ro' ? 'Rating' : 'Rating' }}
+        <select formControlName="rating">
+          <option *ngFor="let rating of [5, 4, 3, 2, 1]" [value]="rating">{{ rating }}</option>
+        </select>
+      </label>
+      <label>
+        {{ language.current() === 'ro' ? 'Comentariu' : 'Comment' }}
+        <textarea formControlName="comment" rows="4" placeholder=""></textarea>
+      </label>
+      <button type="submit">
+        {{ language.current() === 'ro' ? 'Trimite recenzia' : 'Submit review' }}
+      </button>
+    </form>
+    <p class="status-message" *ngIf="statusMessage">{{ statusMessage }}</p>
+  </div>
 </section>
