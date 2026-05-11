@@ -1,0 +1,76 @@
+<section class="schedule-page section-shell">
+  <div class="schedule-panel">
+    <p class="kicker">{{ language.current() === 'ro' ? 'Programare' : 'Schedule' }}</p>
+    <h1>
+      {{ language.current() === 'ro'
+        ? 'Programeaza o sesiune memorabila'
+        : 'Schedule a memorable session' }}
+    </h1>
+    <p class="intro">
+      {{ language.current() === 'ro'
+        ? 'Alege o data, un loc si un tip de sesiune potrivit pentru tine.'
+        : 'Choose a date, location and session style that fits you.' }}
+    </p>
+
+    <div *ngIf="!isLoggedIn" class="schedule-cta">
+      <p>
+        {{ language.current() === 'ro'
+          ? 'Pentru a continua, te rugam sa te autentifici sau sa iti creezi un cont.'
+          : 'To continue, please log in or create an account.' }}
+      </p>
+      <button type="button" (click)="navigateToAuth()" class="primary-button">
+        {{ language.current() === 'ro' ? 'Autentificare' : 'Login' }}
+      </button>
+      <p class="hint">
+        {{ language.current() === 'ro'
+          ? 'Dupa autentificare, vei reveni aici pentru a finaliza programarea.'
+          : 'After logging in, you will return here to complete your booking.' }}
+      </p>
+    </div>
+
+    <form *ngIf="isLoggedIn" [formGroup]="bookingForm" (ngSubmit)="submitSchedule()" class="schedule-form">
+      <div class="field-grid">
+        <label>
+          {{ language.current() === 'ro' ? 'Nume complet' : 'Full name' }}
+          <input type="text" formControlName="fullName" placeholder="Alex Johnson" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Email' : 'Email' }}
+          <input type="email" formControlName="email" placeholder="alex@example.com" />
+        </label>
+      </div>
+
+      <div class="field-grid">
+        <label>
+          {{ language.current() === 'ro' ? 'Data' : 'Date' }}
+          <input type="date" formControlName="date" />
+        </label>
+        <label>
+          {{ language.current() === 'ro' ? 'Ora' : 'Time' }}
+          <input type="time" formControlName="time" />
+        </label>
+      </div>
+
+      <label>
+        {{ language.current() === 'ro' ? 'Locatia' : 'Location' }}
+        <input type="text" formControlName="location" placeholder="Bucharest studio" />
+      </label>
+
+      <label>
+        {{ language.current() === 'ro' ? 'Tip sesiune' : 'Session type' }}
+        <input type="text" formControlName="sessionType" placeholder="Couple portrait" />
+      </label>
+
+      <label>
+        {{ language.current() === 'ro' ? 'Descriere scurta' : 'Brief description' }}
+        <textarea formControlName="notes" rows="4" placeholder="Any details or requests?"></textarea>
+      </label>
+
+      <button type="submit" class="primary-button">
+        {{ language.current() === 'ro' ? 'Programeaza acum' : 'Schedule now' }}
+      </button>
+    </form>
+
+    <p class="status-message" *ngIf="statusMessage">{{ statusMessage }}</p>
+  </div>
+</section>

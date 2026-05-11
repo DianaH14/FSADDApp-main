@@ -6,22 +6,17 @@
         ? 'Hai sa transformam ziua voastra intr-o poveste vizuala atemporala.'
         : 'Let us transform your day into a timeless visual story.' }}
     </h2>
-    <p class="description">
-      {{ language.current() === 'ro'
-        ? 'Spune-mi cateva detalii despre evenimentul vostru, iar eu voi reveni cu o propunere personalizata.'
-        : 'Share a few details about your event and I will return with a tailored proposal.' }}
-    </p>
 
     <div class="status-message" *ngIf="statusMessage">{{ statusMessage }}</div>
 
     <div *ngIf="!isLoggedIn" class="auth-panel">
       <p>
         {{ language.current() === 'ro'
-          ? 'Autentifica-te sau inregistreaza-te pentru a face o rezervare.'
-          : 'Please log in or register to create a booking.' }}
+          ? 'Logheaza-te mai intai si apoi programeaza sesiunea.'
+          : 'Log in first and then schedule your session.' }}
       </p>
-      <button type="button" (click)="navigateToAuth()">
-        {{ language.current() === 'ro' ? 'Autentificare / Inregistrare' : 'Login / Register' }}
+      <button type="button" (click)="navigateToAuth()" class="schedule-button">
+        {{ language.current() === 'ro' ? 'Programeaza' : 'Schedule' }}
       </button>
     </div>
 

@@ -45,7 +45,7 @@ export class AuthPageComponent {
       this.api.login({ email, password }).subscribe({
         next: (response) => {
           localStorage.setItem('fsadd_token', response.token);
-          this.router.navigate(['/']);
+          this.router.navigate(['/schedule']);
         },
         error: () => {
           this.statusMessage = 'Login failed. Check your email and password.';
@@ -58,7 +58,7 @@ export class AuthPageComponent {
     this.api.register({ name, email, password }).subscribe({
       next: (response) => {
         localStorage.setItem('fsadd_token', response.token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/schedule']);
       },
       error: () => {
         this.statusMessage = 'Registration failed. Please use a different email.';

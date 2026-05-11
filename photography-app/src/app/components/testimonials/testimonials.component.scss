@@ -28,24 +28,122 @@ h2 {
 }
 
 .card {
-	padding: 1.55rem;
-	background: rgba(255, 255, 255, 0.66);
-	border: 1px solid rgba(156, 138, 117, 0.2);
-	backdrop-filter: blur(4px);
+	padding: 1.75rem;
+	background: rgba(255, 255, 255, 0.8);
+	border: 1px solid rgba(156, 138, 117, 0.18);
+	border-radius: 1.45rem;
+	backdrop-filter: blur(8px);
+	box-shadow: 0 18px 40px rgba(31, 29, 27, 0.08);
+	transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 26px 50px rgba(31, 29, 27, 0.12);
 }
 
 .quote {
 	margin: 0;
 	color: #3f362e;
-	line-height: 1.85;
+	font-size: clamp(0.95rem, 1vw, 1.05rem);
+	line-height: 1.8;
 }
 
 .author {
-	margin: 1.2rem 0 0;
+	margin: 1.35rem 0 0;
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	font-size: 0.78rem;
+	color: #8f7d67;
+}
+
+.review-form {
+	margin-top: 3rem;
+	padding: 2rem;
+	background: rgba(255, 255, 255, 0.82);
+	border: 1px solid rgba(156, 138, 117, 0.16);
+	border-radius: 1.75rem;
+	backdrop-filter: blur(14px);
+}
+
+.review-form h3 {
+	margin: 0 0 1rem;
+	font-family: var(--font-display);
+	font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+}
+
+.review-form p {
+	margin: 0 0 1.5rem;
+	color: #5f5244;
+	font-size: 0.98rem;
+	line-height: 1.75;
+}
+
+.review-form label {
+	display: grid;
+	gap: 0.55rem;
+	margin-bottom: 1rem;
+	color: #3f362e;
+}
+
+.review-form select,
+.review-form textarea {
+	width: 100%;
+	padding: 1rem 1.1rem;
+	border-radius: 1rem;
+	border: 1px solid rgba(31, 29, 27, 0.12);
+	background: rgba(255, 255, 255, 0.95);
+	color: #1f1d1b;
+	box-shadow: inset 0 1px 2px rgba(31, 29, 27, 0.05);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-form select {
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f1d1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: right 1rem center;
+	background-size: 1.2rem;
+	padding-right: 2.8rem;
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.review-form select:hover,
+.review-form select:focus,
+.review-form textarea:focus {
+	outline: none;
+	border-color: rgba(31, 29, 27, 0.24);
+	box-shadow: inset 0 1px 3px rgba(31, 29, 27, 0.08);
+}
+
+.review-form textarea {
+	resize: vertical;
+	min-height: 120px;
+}
+
+.review-form button {
+	margin-top: 0.8rem;
+	padding: 1rem 1.2rem;
+	border: none;
+	border-radius: 1rem;
+	background: #1f1d1b;
+	color: #f8f6f2;
 	text-transform: uppercase;
 	letter-spacing: 0.12em;
-	font-size: 0.76rem;
-	color: #8f7d67;
+	font-weight: 700;
+	cursor: pointer;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.review-form button:hover {
+	transform: translateY(-1px);
+	opacity: 0.96;
+}
+
+.status-message {
+	margin-top: 1rem;
+	color: #5f5244;
 }
 
 @media (max-width: 970px) {
