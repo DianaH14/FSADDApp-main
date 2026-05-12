@@ -1,30 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { LanguageService } from '../../core/language.service';
-import { ApiService, ReviewCreateDto, ReviewResponseDto } from '../../services/api.service';
+import { ApiService, ReviewResponseDto } from '../../services/api.service';
 
 @Component({
   selector: 'app-testimonials',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule],
   templateUrl: './testimonials.component.html',
   styleUrl: './testimonials.component.scss'
 })
 export class TestimonialsComponent {
   readonly language = inject(LanguageService);
   private readonly api = inject(ApiService);
-  private readonly router = inject(Router);
-  private readonly formBuilder = inject(FormBuilder);
 
   backendReviews: ReviewResponseDto[] = [];
-  statusMessage = '';
-  isLoggedIn = false;
-
-  reviewForm = this.formBuilder.group({
-    rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
-    comment: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]]
-  });
 
   readonly testimonials = {
     ro: [
@@ -74,7 +63,6 @@ export class TestimonialsComponent {
   };
 
   constructor() {
-    this.isLoggedIn = !!this.api.getToken();
     this.loadReviews();
   }
 
@@ -85,36 +73,6 @@ export class TestimonialsComponent {
       },
       error: () => {
         this.backendReviews = [];
-      }
-    });
-  }
-
-  submitReview(): void {
-    if (!this.isLoggedIn) {
-      this.router.navigate(['/auth']);
-      return;
-    }
-
-    if (this.reviewForm.invalid) {
-      this.statusMessage = this.language.current() === 'ro'
-        ? 'Te rog completeaza formularul de recenzie corect.'
-        : 'Please complete the review form correctly.';
-      return;
-    }
-
-    const body: ReviewCreateDto = this.reviewForm.value as ReviewCreateDto;
-    this.api.postReview(body).subscribe({
-      next: () => {
-        this.statusMessage = this.language.current() === 'ro'
-          ? 'Recenzia a fost trimisa cu succes.'
-          : 'Review submitted successfully.';
-        this.reviewForm.reset({ rating: 5, comment: '' });
-        this.loadReviews();
-      },
-      error: () => {
-        this.statusMessage = this.language.current() === 'ro'
-          ? 'Nu s-a putut trimite recenzia. Incearca din nou.'
-          : 'Could not submit review. Please try again.';
       }
     });
   }

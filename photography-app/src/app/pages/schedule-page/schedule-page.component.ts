@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LanguageService } from '../../core/language.service';
@@ -12,7 +12,7 @@ import { ApiService, BookingCreateDto } from '../../services/api.service';
   templateUrl: './schedule-page.component.html',
   styleUrls: ['./schedule-page.component.scss']
 })
-export class SchedulePageComponent {
+export class SchedulePageComponent implements OnInit {
   readonly language = inject(LanguageService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly api = inject(ApiService);
@@ -20,19 +20,16 @@ export class SchedulePageComponent {
 
   isLoggedIn = false;
   statusMessage = '';
-  userName = '';
 
   bookingForm = this.formBuilder.group({
-    fullName: ['', Validators.required],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    date: ['', Validators.required],
-    time: ['', Validators.required],
-    location: ['', Validators.required],
-    sessionType: ['', Validators.required],
-    notes: ['']
+    phone: ['', Validators.required],
+    date: ['', Validators.required]
   });
 
-  constructor() {
+  ngOnInit(): void {
     this.isLoggedIn = !!this.api.getToken();
     if (this.isLoggedIn) {
       this.loadCurrentUser();
@@ -40,7 +37,7 @@ export class SchedulePageComponent {
   }
 
   navigateToAuth(): void {
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/auth'], { queryParams: { returnUrl: '/schedule' } });
   }
 
   submitSchedule(): void {
@@ -58,13 +55,30 @@ export class SchedulePageComponent {
       return;
     }
 
-    const bookingData = this.bookingForm.value as BookingCreateDto;
+    const values = this.bookingForm.value as {
+      firstName: string | null;
+      lastName: string | null;
+      email: string | null;
+      phone: string | null;
+      date: string | null;
+    };
+
+    const bookingData: BookingCreateDto = {
+      fullName: `${values.firstName?.trim() ?? ''} ${values.lastName?.trim() ?? ''}`.trim(),
+      email: values.email ?? '',
+      date: values.date ?? '',
+      time: '10:00',
+      location: 'Photoshoot request',
+      sessionType: 'Photoshoot',
+      notes: `Phone: ${values.phone ?? ''}`
+    };
+
     this.api.createBooking(bookingData).subscribe({
       next: () => {
         this.statusMessage = this.language.current() === 'ro'
           ? 'Cererea ta a fost trimisa. Te voi contacta curand.'
           : 'Your request has been submitted. I will contact you soon.';
-        this.bookingForm.reset({ fullName: this.userName, email: this.bookingForm.controls.email.value, notes: '' });
+        this.bookingForm.reset();
       },
       error: () => {
         this.statusMessage = this.language.current() === 'ro'
@@ -77,12 +91,14 @@ export class SchedulePageComponent {
   private loadCurrentUser(): void {
     this.api.getMe().subscribe({
       next: (user) => {
-        this.userName = user.name;
-        this.bookingForm.controls.fullName.setValue(user.name);
+        const [firstName, ...rest] = user.name.split(' ');
+        this.bookingForm.controls.firstName.setValue(firstName);
+        this.bookingForm.controls.lastName.setValue(rest.join(' ') || '');
         this.bookingForm.controls.email.setValue(user.email);
       },
       error: () => {
-        this.isLoggedIn = false;
+        // Keep the login state when a token exists, even if fetching user details fails.
+        // This prevents the schedule page from showing the auth CTA after successful login.
       }
     });
   }

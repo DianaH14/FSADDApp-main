@@ -1,0 +1,9 @@
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.csproj.AssemblyReference.cache
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\rpswa.dswa.cache.json
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.AssemblyInfoInputs.cache
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.AssemblyInfo.cs
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.csproj.CoreCompileInputs.cache
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.MvcApplicationPartsAssemblyInfo.cs
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.MvcApplicationPartsAssemblyInfo.cache
+C:\master\fsadd\FSADD-app\backend\BookingApi\backend\BookingApi\obj_temp\Debug\net8.0\BookingApi.sourcelink.json

@@ -3,8 +3,8 @@
     <p class="kicker">{{ language.current() === 'ro' ? 'Programare' : 'Schedule' }}</p>
     <h1>
       {{ language.current() === 'ro'
-        ? 'Programeaza o sesiune memorabila'
-        : 'Schedule a memorable session' }}
+        ? 'Programeaza o sesiune foto'
+        : 'Schedule a photo session' }}
     </h1>
     <p class="intro">
       {{ language.current() === 'ro'
@@ -31,43 +31,33 @@
     <form *ngIf="isLoggedIn" [formGroup]="bookingForm" (ngSubmit)="submitSchedule()" class="schedule-form">
       <div class="field-grid">
         <label>
-          {{ language.current() === 'ro' ? 'Nume complet' : 'Full name' }}
-          <input type="text" formControlName="fullName" placeholder="Alex Johnson" />
+          {{ language.current() === 'ro' ? 'Prenume' : 'First name' }}
+          <input type="text" formControlName="firstName" placeholder="Alex" required />
         </label>
         <label>
-          {{ language.current() === 'ro' ? 'Email' : 'Email' }}
-          <input type="email" formControlName="email" placeholder="alex@example.com" />
+          {{ language.current() === 'ro' ? 'Nume' : 'Last name' }}
+          <input type="text" formControlName="lastName" placeholder="Johnson" required />
         </label>
       </div>
 
       <div class="field-grid">
         <label>
-          {{ language.current() === 'ro' ? 'Data' : 'Date' }}
-          <input type="date" formControlName="date" />
+          {{ language.current() === 'ro' ? 'Email' : 'Email' }}
+          <input type="email" formControlName="email" placeholder="alex@example.com" required />
         </label>
         <label>
-          {{ language.current() === 'ro' ? 'Ora' : 'Time' }}
-          <input type="time" formControlName="time" />
+          {{ language.current() === 'ro' ? 'Telefon' : 'Telephone' }}
+          <input type="tel" formControlName="phone" placeholder="+40 712 345 678" required />
         </label>
       </div>
 
       <label>
-        {{ language.current() === 'ro' ? 'Locatia' : 'Location' }}
-        <input type="text" formControlName="location" placeholder="Bucharest studio" />
+        {{ language.current() === 'ro' ? 'Data sedintei foto' : 'Photoshooting date' }}
+        <input type="date" formControlName="date" required />
       </label>
 
-      <label>
-        {{ language.current() === 'ro' ? 'Tip sesiune' : 'Session type' }}
-        <input type="text" formControlName="sessionType" placeholder="Couple portrait" />
-      </label>
-
-      <label>
-        {{ language.current() === 'ro' ? 'Descriere scurta' : 'Brief description' }}
-        <textarea formControlName="notes" rows="4" placeholder="Any details or requests?"></textarea>
-      </label>
-
-      <button type="submit" class="primary-button">
-        {{ language.current() === 'ro' ? 'Programeaza acum' : 'Schedule now' }}
+      <button type="submit" class="primary-button submit-button">
+        {{ language.current() === 'ro' ? 'Trimite cererea' : 'Submit request' }}
       </button>
     </form>
 

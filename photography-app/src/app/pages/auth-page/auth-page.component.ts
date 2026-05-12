@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from '../../core/language.service';
 import { ApiService } from '../../services/api.service';
 
@@ -17,6 +17,7 @@ export class AuthPageComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly api = inject(ApiService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   authMode: 'login' | 'register' = 'login';
   statusMessage = '';
@@ -41,11 +42,13 @@ export class AuthPageComponent {
     const email = this.authForm.controls.email.value?.trim() ?? '';
     const password = this.authForm.controls.password.value ?? '';
 
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/schedule';
+
     if (this.authMode === 'login') {
       this.api.login({ email, password }).subscribe({
         next: (response) => {
           localStorage.setItem('fsadd_token', response.token);
-          this.router.navigate(['/schedule']);
+          this.router.navigateByUrl(returnUrl);
         },
         error: () => {
           this.statusMessage = 'Login failed. Check your email and password.';
@@ -58,7 +61,7 @@ export class AuthPageComponent {
     this.api.register({ name, email, password }).subscribe({
       next: (response) => {
         localStorage.setItem('fsadd_token', response.token);
-        this.router.navigate(['/schedule']);
+        this.router.navigateByUrl(returnUrl);
       },
       error: () => {
         this.statusMessage = 'Registration failed. Please use a different email.';
