@@ -1,58 +1,124 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# ─────────────────────────────────────────────────────────────────
+# Trigger: full pipeline runs on every push to main.
+# PR builds are triggered by branch policies (Step 7) and skip
+# the docker push and deploy stage entirely via conditions.
+# ─────────────────────────────────────────────────────────────────
 trigger:
   branches:
     include:
       - main
-
-pr:
-  branches:
-    include:
-      - '*'
-
+# Disable built-in PR trigger — branch policies drive those.
+pr: none
 pool:
-  vmImage: ubuntu-latest
-
+ name: 'local'
+  vmImage: 'ubuntu-latest'
 variables:
-  nodeVersion: '20.x'
-  frontendPath: 'photography-app'
-
-steps:
-  - task: UseNode@1
-    displayName: 'Install Node.js'
-    inputs:
-      versionSpec: '$(nodeVersion)'
-
-  - task: Cache@2
-    displayName: 'Restore npm cache'
-    inputs:
-      key: 'npm | "$(Agent.OS)" | $(frontendPath)/package-lock.json'
-      restoreKeys: |
-        npm | "$(Agent.OS)"
-      path: $(frontendPath)/node_modules
-
-  - script: |
-      cd $(frontendPath)
-      npm ci
-    displayName: 'Install frontend dependencies'
-
-  - script: |
-      cd $(frontendPath)
-      npm run test:ci
-    displayName: 'Run Angular unit tests'
-
-  - script: |
-      cd $(frontendPath)
-      npm run build -- --configuration production
-    displayName: 'Build Angular application'
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish coverage artifact'
-    inputs:
-      PathtoPublish: '$(Build.SourcesDirectory)/photography-app/coverage'
-      ArtifactName: 'frontend-coverage'
-      publishLocation: 'Container'
-    condition: succeeded()
+ buildConfiguration: 'Release'
+  - group: acr-credentials            # loads ACR_SERVER, ACR_USERNAME, ACR_PASSWORD
+  - name: buildConfiguration
+    value: 'Release'
+  - name: imageName
+    value: 'devops-lab-hd'
+  - name: containerAppName
+    value: 'upt-devops-2'
+  - name: resourceGroup
+    value: 'rg-devops-2026'
+stages:
+  # ═══════════════════════════════════════════════════════
+  # STAGE 1 — Build, Test, Docker Build & Push
+  #
+  # Jobs:
+  #   BuildAndTest  → always runs (main + PRs)
+  #   DockerPublish → runs only on main (skipped on PRs)
+  # ═══════════════════════════════════════════════════════
+  - stage: Build
+    displayName: 'Build'
+    jobs:
+      - job: BuildAndTest
+        displayName: 'Restore, Build and Test'
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Install .NET 10 SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '10.x'
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore NuGet packages'
+            inputs:
+              command: 'restore'
+              projects: '**/*.csproj'
+          - task: DotNetCoreCLI@2
+            displayName: 'Build solution'
+            inputs:
+              command: 'build'
+              projects: '**/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --no-restore'
+          - task: DotNetCoreCLI@2
+            displayName: 'Run unit tests'
+            inputs:
+              projects: 'tests/**/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --no-build'
+              publishTestResults: true
+      - job: DockerPublish
+        displayName: 'Docker Build and Push'
+        dependsOn: BuildAndTest
+                # Skip this job on PR builds — only push images from main.
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+        steps:
+          - task: Bash@3
+            displayName: 'Login to ACR'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker login $(ACR_SERVER) \
+                  --username $(ACR_USERNAME) \
+                  --password $(ACR_PASSWORD)
+          - task: Bash@3
+            displayName: 'Build Docker image'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker build \
+                  --tag $(ACR_SERVER)/$(imageName):$(Build.BuildId) \
+                  --tag $(ACR_SERVER)/$(imageName):latest \
+                  .
+          - task: Bash@3
+            displayName: 'Push Docker image'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker push $(ACR_SERVER)/$(imageName):$(Build.BuildId)
+                docker push $(ACR_SERVER)/$(imageName):latest
+  # ═══════════════════════════════════════════════════════
+  # STAGE 2 — Deploy to Azure Container Apps
+  #
+  # Requires manual approval via the 'dev' environment.
+  # Only runs on main after the Build stage succeeds.
+  # ═══════════════════════════════════════════════════════
+  - stage: Deploy
+    displayName: 'Deploy to Azure Container Apps'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployACA
+        displayName: 'Deploy Container Revision'
+                # 'deployment' job type is required for environment checks to apply.
+        environment: 'dev'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Update Container App image'
+                  inputs:
+                    azureSubscription: 'azure-service-connection'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      az containerapp update \
+                        --name $(containerAppName) \
+                        --resource-group $(resourceGroup) \
+                        --image $(ACR_SERVER)/$(imageName):$(Build.BuildId) \
+                        --registry-server $(ACR_SERVER) \
+                        --registry-username $(ACR_USERNAME) \
+                        --registry-password $(ACR_PASSWORD)
