@@ -41,32 +41,32 @@ stages:
       - job: BuildAndTest
         displayName: 'Restore, Build and Test'
         steps:
-          - task: UseDotNet@2
-            displayName: 'Install .NET 10 SDK'
+          - task: NodeTool@0
+            displayName: 'Install Node.js'
             inputs:
-              packageType: 'sdk'
-              version: '10.x'
+              versionSpec: '20.x'
 
-          - task: DotNetCoreCLI@2
-            displayName: 'Restore NuGet packages'
-            inputs:
-              command: 'restore'
-              projects: '**/*.csproj'
+          - script: |
+              cd photography-app
+              npm ci
+            displayName: 'Install dependencies'
 
-          - task: DotNetCoreCLI@2
-            displayName: 'Build solution'
-            inputs:
-              command: 'build'
-              projects: '**/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --no-restore'
+          - script: |
+              cd photography-app
+              npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+            displayName: 'Run Angular unit tests'
 
-          - task: DotNetCoreCLI@2
-            displayName: 'Run unit tests'
+          - task: PublishCodeCoverageResults@2
+            displayName: 'Publish code coverage'
             inputs:
-              command: 'test'
-              projects: 'tests/**/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --no-build'
-              publishTestResults: true
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: 'photography-app/coverage/**/cobertura-coverage.xml'
+              reportDirectory: 'photography-app/coverage'
+
+          - script: |
+              cd photography-app
+              npm run build -- --configuration production
+            displayName: 'Build Angular application'
 
       - job: DockerPublish
         displayName: 'Docker Build and Push'
