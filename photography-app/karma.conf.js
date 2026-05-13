@@ -23,10 +23,11 @@ module.exports = function (config) {
       reporters: [
         { type: 'html' },
         { type: 'lcovonly' },
-        { type: 'text-summary' }
+        { type: 'text-summary' },
+        { type: 'cobertura' }
       ]
     },
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['progress', 'coverage', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
