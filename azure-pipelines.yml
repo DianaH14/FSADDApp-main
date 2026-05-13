@@ -1,0 +1,136 @@
+# ─────────────────────────────────────────────────────────────────
+# Trigger: full pipeline runs on every push to main.
+# PR builds are triggered by branch policies (Step 7) and skip
+# the docker push and deploy stage entirely via conditions.
+# ─────────────────────────────────────────────────────────────────
+trigger:
+  branches:
+    include:
+      - main
+
+# Disable built-in PR trigger — branch policies drive those.
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: acr-credentials            # loads ACR_SERVER, ACR_USERNAME, ACR_PASSWORD
+  - name: buildConfiguration
+    value: 'Release'
+  - name: imageName
+    value: 'devops-lab-hd'
+  - name: containerAppName
+    value: 'upt-devops-2'
+  - name: resourceGroup
+    value: 'rg-devops-2026'
+
+stages:
+
+  # ═══════════════════════════════════════════════════════
+  # STAGE 1 — Build, Test, Docker Build & Push
+  #
+  # Jobs:
+  #   BuildAndTest  → always runs (main + PRs)
+  #   DockerPublish → runs only on main (skipped on PRs)
+  # ═══════════════════════════════════════════════════════
+  - stage: Build
+    displayName: 'Build'
+    jobs:
+
+      - job: BuildAndTest
+        displayName: 'Restore, Build and Test'
+        steps:
+          - task: UseNode@1
+            displayName: 'Install Node.js'
+            inputs:
+              version: '20.x'
+
+          - script: |
+              cd photography-app
+              npm ci
+            displayName: 'Install dependencies'
+
+          - script: |
+              cd photography-app
+              npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+            displayName: 'Run Angular unit tests'
+
+          - task: PublishCodeCoverageResults@2
+            displayName: 'Publish code coverage'
+            inputs:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: 'photography-app/coverage/**/cobertura-coverage.xml'
+              reportDirectory: 'photography-app/coverage'
+
+          - script: |
+              cd photography-app
+              npm run build -- --configuration production
+            displayName: 'Build Angular application'
+
+      - job: DockerPublish
+        displayName: 'Docker Build and Push'
+        dependsOn: BuildAndTest
+                # Skip this job on PR builds — only push images from main.
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+        steps:
+          - task: Bash@3
+            displayName: 'Login to ACR'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker login $(ACR_SERVER) \
+                  --username $(ACR_USERNAME) \
+                  --password $(ACR_PASSWORD)
+
+          - task: Bash@3
+            displayName: 'Build Docker image'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker build \
+                  --tag $(ACR_SERVER)/$(imageName):$(Build.BuildId) \
+                  --tag $(ACR_SERVER)/$(imageName):latest \
+                  .
+
+          - task: Bash@3
+            displayName: 'Push Docker image'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker push $(ACR_SERVER)/$(imageName):$(Build.BuildId)
+                docker push $(ACR_SERVER)/$(imageName):latest
+
+  # ═══════════════════════════════════════════════════════
+  # STAGE 2 — Deploy to Azure Container Apps
+  #
+  # Requires manual approval via the 'dev' environment.
+  # Only runs on main after the Build stage succeeds.
+  # ═══════════════════════════════════════════════════════
+  - stage: Deploy
+    displayName: 'Deploy to Azure Container Apps'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployACA
+        displayName: 'Deploy Container Revision'
+                # 'deployment' job type is required for environment checks to apply.
+        environment: 'dev'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Update Container App image'
+                  inputs:
+                    azureSubscription: 'azure-service-connection'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      az containerapp update \
+                        --name $(containerAppName) \
+                        --resource-group $(resourceGroup) \
+                        --image $(ACR_SERVER)/$(imageName):$(Build.BuildId) \
+                        --registry-server $(ACR_SERVER) \
+                        --registry-username $(ACR_USERNAME) \
+                        --registry-password $(ACR_PASSWORD)
