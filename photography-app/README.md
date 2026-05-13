@@ -41,7 +41,27 @@ This will compile your project and store the build artifacts in the `dist/` dire
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
-ng test
+npm test
+```
+
+For CI-friendly headless execution and coverage reporting, run:
+
+```bash
+npm run test:ci
+```
+
+The Angular coverage report is generated under:
+
+```text
+coverage/photography-app
+```
+
+## Generating coverage locally
+
+After `npm run test:ci` completes, open the generated report:
+
+```bash
+start coverage/photography-app/index.html
 ```
 
 ## Running end-to-end tests

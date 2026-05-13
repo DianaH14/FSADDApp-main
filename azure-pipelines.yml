@@ -4,16 +4,55 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - '*'
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  nodeVersion: '20.x'
+  frontendPath: 'photography-app'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+steps:
+  - task: UseNode@1
+    displayName: 'Install Node.js'
+    inputs:
+      versionSpec: '$(nodeVersion)'
+
+  - task: Cache@2
+    displayName: 'Restore npm cache'
+    inputs:
+      key: 'npm | "$(Agent.OS)" | $(frontendPath)/package-lock.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: $(frontendPath)/node_modules
+
+  - script: |
+      cd $(frontendPath)
+      npm ci
+    displayName: 'Install frontend dependencies'
+
+  - script: |
+      cd $(frontendPath)
+      npm run test:ci
+    displayName: 'Run Angular unit tests'
+
+  - script: |
+      cd $(frontendPath)
+      npm run build -- --configuration production
+    displayName: 'Build Angular application'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish coverage artifact'
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)/photography-app/coverage'
+      ArtifactName: 'frontend-coverage'
+      publishLocation: 'Container'
+    condition: succeeded()
