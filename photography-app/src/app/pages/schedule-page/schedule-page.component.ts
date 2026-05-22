@@ -73,17 +73,14 @@ export class SchedulePageComponent implements OnInit {
       notes: `Phone: ${values.phone ?? ''}`
     };
 
+    this.router.navigate(['/schedule-confirmation']);
+
     this.api.createBooking(bookingData).subscribe({
       next: () => {
-        this.statusMessage = this.language.current() === 'ro'
-          ? 'Cererea ta a fost trimisa. Te voi contacta curand.'
-          : 'Your request has been submitted. I will contact you soon.';
         this.bookingForm.reset();
       },
       error: () => {
-        this.statusMessage = this.language.current() === 'ro'
-          ? 'Nu am putut inregistra programarea. Incearca din nou mai tarziu.'
-          : 'Unable to schedule right now. Please try again later.';
+        console.error('Booking submit failed');
       }
     });
   }

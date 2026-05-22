@@ -1,0 +1,56 @@
+.schedule-page {
+  display: flex;
+  justify-content: center;
+  padding: clamp(4rem, 7vw, 6rem) 1rem 5rem;
+}
+
+.schedule-panel {
+  width: min(700px, 100%);
+  padding: clamp(2.5rem, 4vw, 3.5rem);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(31, 29, 27, 0.08);
+  box-shadow: 0 32px 80px rgba(31, 29, 27, 0.1);
+  backdrop-filter: blur(18px);
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  color: #9b8566;
+}
+
+.schedule-panel h1 {
+  margin: 0.85rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.04;
+}
+
+.intro {
+  margin: 0 0 2rem;
+  max-width: 28rem;
+  color: #5f5244;
+  line-height: 1.8;
+}
+
+.primary-button {
+  min-width: 220px;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem 1.4rem;
+  background: #1f1d1b;
+  color: #f8f6f2;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+}

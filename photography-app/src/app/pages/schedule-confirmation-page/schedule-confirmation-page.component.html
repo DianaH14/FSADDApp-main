@@ -1,0 +1,18 @@
+<section class="schedule-page section-shell">
+  <div class="schedule-panel">
+    <p class="kicker">
+      {{ language.current() === 'ro' ? 'Programare' : 'Schedule' }}
+    </p>
+    <h1>
+      {{ language.current() === 'ro' ? 'Cerere trimisa' : 'Request sent' }}
+    </h1>
+    <p class="intro">
+      {{ language.current() === 'ro'
+        ? 'Mulțumim pentru cererea ta. Alex te va contacta în curând pentru mai multe detalii.'
+        : 'Thank you for your request. Alex will contact you soon with more details.' }}
+    </p>
+    <button type="button" class="primary-button" (click)="goHome()">
+      {{ language.current() === 'ro' ? 'Înapoi la prima pagină' : 'Back to home' }}
+    </button>
+  </div>
+</section>
